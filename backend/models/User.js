@@ -21,10 +21,65 @@ const userSchema = new mongoose.Schema(
     role: { type: String, enum: ["user", "admin", "seller"], default: "user" },
     resetPasswordToken: { type: String },
     resetPasswordExpire: { type: Date },
-    phoneNumber: { type: String, minlength: 10, maxlength: 10, trim: true },
-    address: { type: String, trim: true },
+    phoneNumber: {
+      type: String,
+      minlength: 10,
+      maxlength: 10,
+      trim: true,
+    },
+
+    address: {
+      fullName: {
+        type: String,
+        trim: true,
+      },
+      houseNo: {
+        type: String,
+        trim: true,
+      },
+      area: {
+        type: String,
+        trim: true,
+      },
+      landmark: {
+        type: String,
+        trim: true,
+      },
+      city: {
+        type: String,
+        trim: true,
+      },
+      state: {
+        type: String,
+        trim: true,
+      },
+      pincode: {
+        type: String,
+        trim: true,
+      },
+    },
     otp: { type: String },
     otpExpiryAt: { type: Date },
+    sellerStatus: {
+      type: String,
+      enum: ["none", "pending", "approved", "rejected"],
+      default: "none",
+    },
+    profileImage: {
+      type: String,
+      default: "",
+    },
+    lastLogin: {
+      type: Date,
+    },
+    isBlocked: {
+      type: Boolean,
+      default: false,
+    },
+    isDeleted: {
+      type: Boolean,
+      default: false,
+    },
   },
   { timestamps: true },
 );

@@ -2,8 +2,8 @@ import User from "../models/User.js";
 
 export const getUserById = async (req, res) => {
   try {
-    const userId = req.user.id;
-    const user = await User.findById(userId).select(
+    const userId = req.user._id;
+    const user = await User.findById(req.user._id).select(
       "-password -otp -otpExpiry",
     );
     if (!user) {
@@ -60,24 +60,9 @@ export const getUserByEmail = async (req, res) => {
   }
 };
 
-export const getAllUsers = async (req, res) => {
-  try {
-    const users = await User.find().select("-password -otp -otpExpiry");
-
-    return res.status(200).json({
-      message: "Users fetched successfully",
-      users,
-    });
-  } catch (error) {
-    return res.status(500).json({
-      message: error.message,
-    });
-  }
-};
-
 export const updateUser = async (req, res) => {
   try {
-    const userId = req.user.id;
+    const userId = req.user._id;
     const { name, phoneNumber, address } = req.body;
     const user = await User.findById(userId);
     if (!user) {
@@ -104,7 +89,7 @@ export const updateUser = async (req, res) => {
 
 export const deleteUser = async (req, res) => {
   try {
-    const userId = req.user.id;
+    const userId = req.user._id;
     const user = await User.findById(userId);
     if (!user) {
       return res.status(404).json({

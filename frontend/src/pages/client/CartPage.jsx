@@ -6,7 +6,10 @@ const CartPage = () => {
   const { cartItems, increaseQty, decreaseQty, removeFromCart } =
     useContext(CartContext);
 
-  const total = cartItems.reduce((acc, item) => acc + item.price * item.qty, 0);
+  const total = cartItems.reduce(
+    (acc, item) => acc + item.product.sellingPrice * item.qty,
+    0,
+  );
 
   return (
     <div className="min-h-screen bg-gray-50 p-6">
@@ -18,20 +21,20 @@ const CartPage = () => {
         <div className="space-y-4 max-w-3xl">
           {cartItems.map((item) => (
             <div
-              key={item._id}
+              key={item.product._id}
               className="bg-white p-4 rounded-lg shadow flex items-center justify-between"
             >
               {/* LEFT SIDE */}
               <div className="flex items-center gap-4">
                 <img
-                  src={item.image}
-                  alt={item.name}
+                  src={item.product.images[0]}
+                  alt={item.product.title}
                   className="w-20 h-20 object-contain"
                 />
 
                 <div>
-                  <h3 className="font-medium">{item.name}</h3>
-                  <p className="text-gray-600">₹{item.price}</p>
+                  <h3 className="font-medium">{item.product.title}</h3>
+                  <p className="text-gray-600">₹{item.product.sellingPrice}</p>
                 </div>
               </div>
 
@@ -40,7 +43,7 @@ const CartPage = () => {
                 {/* QTY CONTROL */}
                 <div className="flex items-center border rounded-lg overflow-hidden">
                   <button
-                    onClick={() => decreaseQty(item._id)}
+                    onClick={() => decreaseQty(item)}
                     className="px-3 py-1 hover:bg-gray-100"
                   >
                     −
@@ -49,7 +52,7 @@ const CartPage = () => {
                   <span className="px-4">{item.qty}</span>
 
                   <button
-                    onClick={() => increaseQty(item._id)}
+                    onClick={() => increaseQty(item)}
                     className="px-3 py-1 hover:bg-gray-100"
                   >
                     +
@@ -58,7 +61,7 @@ const CartPage = () => {
 
                 {/* REMOVE BUTTON */}
                 <button
-                  onClick={() => removeFromCart(item._id)}
+                  onClick={() => removeFromCart(item)}
                   className="text-red-500 hover:underline"
                 >
                   Remove

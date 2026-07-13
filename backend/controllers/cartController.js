@@ -106,7 +106,17 @@ export const updateCartItem = async (req, res) => {
     );
 
     if (!item) {
-      return res.status(404).json({ message: "Item not found" });
+      return res.status(404).json({
+        message: "Item not found",
+      });
+    }
+
+    const product = await Product.findById(productId);
+
+    if (qty > product.stockQuantity) {
+      return res.status(400).json({
+        message: `Only ${product.stockQuantity} items left in stock`,
+      });
     }
 
     item.qty = qty;
@@ -115,6 +125,8 @@ export const updateCartItem = async (req, res) => {
 
     res.json(cart);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    res.status(500).json({
+      message: error.message,
+    });
   }
 };

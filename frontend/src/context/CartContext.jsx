@@ -1,53 +1,85 @@
-import { createContext, useState, useEffect } from "react";
+import { createContext, useState, useEffect, useContext } from "react";
+import API from "../services/api";
+import { AuthContext } from "./AuthContext";
 
 export const CartContext = createContext();
 
 export const CartProvider = ({ children }) => {
-  const [cartItems, setCartItems] = useState(() => {
-    const stored = localStorage.getItem("cartItems");
-    return stored ? JSON.parse(stored) : [];
-  });
+  const [cartItems, setCartItems] = useState([]);
+  const { userInfo } = useContext(AuthContext);
+
+  // Fetch logged-in user's cart from backend
+  const fetchCart = async () => {
+    try {
+      const { data } = await API.get("/cart");
+      setCartItems(data.items);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   useEffect(() => {
-    localStorage.setItem("cartItems", JSON.stringify(cartItems));
-  }, [cartItems]);
+    if (userInfo) {
+      fetchCart();
+    } else {
+      setCartItems([]);
+    }
+  }, [userInfo]);
 
-  const addToCart = (product) => {
-    console.log("ADD CLICKED", product); // debug
+  const addToCart = async (product) => {
+    try {
+      await API.post("/cart", {
+        productId: product._id,
+        qty: 1,
+      });
+      await fetchCart();
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
-    setCartItems((prev) => {
-      const exist = prev.find((item) => item._id === product._id);
+  const increaseQty = async (item) => {
+    try {
+      const newQty = item.qty + 1;
+      await API.put("/cart", {
+        productId: item.product._id,
+        qty: newQty,
+      });
+      await fetchCart();
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
-      if (exist) {
-        return prev.map((item) =>
-          item._id === product._id ? { ...item, qty: item.qty + 1 } : item,
-        );
+  const decreaseQty = async (item) => {
+    try {
+      if (item.qty === 1) {
+        await removeFromCart(item);
+        return;
       } else {
-        return [...prev, { ...product, qty: 1 }];
+        const newQty = item.qty - 1;
+        await API.put("/cart", {
+          productId: item.product._id,
+          qty: newQty,
+        });
+        await fetchCart();
       }
-    });
+    } catch (error) {
+      console.log(error);
+    }
   };
 
-  const increaseQty = (id) => {
-    setCartItems((prev) =>
-      prev.map((item) =>
-        item._id === id ? { ...item, qty: item.qty + 1 } : item,
-      ),
-    );
-  };
-
-  const decreaseQty = (id) => {
-    setCartItems((prev) =>
-      prev.map((item) =>
-        item._id === id
-          ? { ...item, qty: item.qty > 1 ? item.qty - 1 : 1 }
-          : item,
-      ),
-    );
-  };
-
-  const removeFromCart = (id) => {
-    setCartItems((prev) => prev.filter((item) => item._id !== id));
+  const removeFromCart = async (item) => {
+    try {
+      await API.delete("/cart", {
+        data: {
+          productId: item.product._id,
+        },
+      });
+      await fetchCart();
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const clearCart = () => {

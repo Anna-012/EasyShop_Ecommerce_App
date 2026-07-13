@@ -11,7 +11,7 @@ const categorySchema = new mongoose.Schema(
     },
     description: { type: String, trim: true, maxlength: 500 },
     imageUrl: { type: String, trim: true },
-    isActice: { type: Boolean, default: true },
+    isActive: { type: Boolean, default: true },
   },
   { timestamps: true },
 );

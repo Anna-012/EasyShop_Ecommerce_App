@@ -24,15 +24,19 @@ const productSchema = new mongoose.Schema(
       trim: true,
       maxlength: 1000,
     },
-    images: [
-      {
-        type: String,
-        required: true,
-      },
-    ],
+    images: {
+      type: [String],
+      required: true,
+      default: [],
+    },
     category: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "categories",
+      required: true,
+    },
+    seller: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
       required: true,
     },
     isActive: {

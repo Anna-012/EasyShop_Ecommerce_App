@@ -13,16 +13,51 @@ const orderSchema = new mongoose.Schema(
         price: Number,
         product: {
           type: mongoose.Schema.Types.ObjectId,
-          ref: "Product",
+          ref: "products",
         },
       },
     ],
 
     shippingAddress: {
-      address: String,
-      city: String,
-      postalCode: String,
-      country: String,
+      fullName: {
+        type: String,
+        required: true,
+      },
+
+      phoneNumber: {
+        type: String,
+        required: true,
+      },
+
+      houseNo: {
+        type: String,
+        required: true,
+      },
+
+      area: {
+        type: String,
+        required: true,
+      },
+
+      landmark: {
+        type: String,
+        default: "",
+      },
+
+      city: {
+        type: String,
+        required: true,
+      },
+
+      state: {
+        type: String,
+        required: true,
+      },
+
+      pincode: {
+        type: String,
+        required: true,
+      },
     },
 
     paymentMethod: {
@@ -39,7 +74,6 @@ const orderSchema = new mongoose.Schema(
 
     totalPrice: Number,
 
-    // ✅ ORDER STATUS (IMPORTANT)
     status: {
       type: String,
       enum: ["Placed", "Processing", "Shipped", "Delivered"],

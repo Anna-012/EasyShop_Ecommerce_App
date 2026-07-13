@@ -1,26 +1,27 @@
 import { useState } from "react";
-import axios from "axios";
+import API from "../../services/api";
 
 const ForgotPassword = () => {
   const [email, setEmail] = useState("");
 
-  const submitHandler = async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
-      const { data } = await axios.post("/api/users/forgot-password", {
+      const { data } = await API.post("/auth/forgot-password", {
         email,
       });
+
       alert(data.message);
-    } catch (err) {
-      alert("Error sending reset link");
+    } catch (error) {
+      alert(error.response?.data?.message || "Error sending reset link");
     }
   };
 
   return (
     <div className="flex justify-center items-center min-h-screen bg-gray-100">
       <form
-        onSubmit={submitHandler}
+        onSubmit={handleSubmit}
         className="bg-white p-8 rounded-2xl shadow-lg w-[350px]"
       >
         <h2 className="text-2xl font-bold text-center mb-2">Forgot Password</h2>

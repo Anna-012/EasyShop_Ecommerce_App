@@ -45,9 +45,9 @@ const VerifyOtp = () => {
 
         <input
           type="text"
-          maxLength="6"
+          maxLength="7"
           placeholder="Enter OTP"
-          className="w-full border px-3 py-2 rounded-lg mb-4 text-center tracking-[10px]"
+          className="w-full border px-3 py-2 rounded-lg mb-4 text-center"
           value={otp}
           onChange={(e) => setOtp(e.target.value)}
         />

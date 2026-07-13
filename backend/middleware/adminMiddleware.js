@@ -1,3 +1,6 @@
+import jwt from "jsonwebtoken";
+import User from "../models/User.js";
+
 const adminMiddleware = (req, res, next) => {
   try {
     if (req.user.role !== "admin") {

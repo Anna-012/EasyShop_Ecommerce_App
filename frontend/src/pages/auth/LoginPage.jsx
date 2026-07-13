@@ -19,9 +19,7 @@ const LoginPage = () => {
         password,
       });
 
-      console.log("STEP 1");
       login(data);
-      console.log("STEP 2");
 
       alert("Login successful");
       navigate("/");

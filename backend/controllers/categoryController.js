@@ -2,7 +2,10 @@ import Category from "../models/Category.js";
 
 export const getAllCategories = async (req, res) => {
   try {
-    const categories = await Category.find({ isActice: true });
+    const categories = await Category.find({
+      isActive: true,
+    });
+
     res.status(200).json({
       message: "Categories fetched successfully",
       categories,
@@ -18,7 +21,7 @@ export const getCategoryById = async (req, res) => {
   try {
     const { id } = req.params;
     const category = await Category.findById(id);
-    if (!category || !category.isActice) {
+    if (!category || !category.isActive) {
       return res.status(404).json({
         message: "Category not found",
       });
@@ -36,26 +39,30 @@ export const getCategoryById = async (req, res) => {
 
 export const createCategory = async (req, res) => {
   try {
-    const { title, description, imageUrl } = req.body;
+    const { title, description } = req.body;
 
-    const existingCategory = await category.findOne({ title });
+    const existingCategory = await Category.findOne({ title });
+
     if (existingCategory) {
       return res.status(400).json({
-        message: "category with this title already exist",
+        message: "Category already exists",
       });
     }
 
     const newCategory = new Category({
       title,
       description,
-      imageUrl,
+      imageUrl: req.file?.path,
     });
+
     await newCategory.save();
-    return res.status(201).json({
+
+    res.status(201).json({
       message: "Category created successfully",
+      category: newCategory,
     });
   } catch (error) {
-    return res.status(500).json({
+    res.status(500).json({
       message: error.message,
     });
   }
@@ -66,15 +73,15 @@ export const updateCategory = async (req, res) => {
     const { id } = req.params;
     const { title, description, imageUrl } = req.body;
 
-    const category = await category.findOne(id);
+    const category = await Category.findById(id);
     if (!category || !category.isActive) {
       return res.status(404).json({
         message: "Category not found",
       });
     }
-    category.title = title || category.title;
-    category.description = description || category.description;
-    category.imageUrl = imageUrl || category.imageUrl;
+    category.title = title ?? category.title;
+    category.description = description ?? category.description;
+    category.imageUrl = req.file?.path || category.imageUrl;
     await category.save();
     res.status(200).json({
       message: "Category updated successfully",
@@ -91,12 +98,12 @@ export const deleteCategory = async (req, res) => {
     const { id } = req.params;
 
     const category = await Category.findById(id);
-    if (!category || !category.isActice) {
+    if (!category || !category.isActive) {
       return res.status(404).json({
         message: "Category not found",
       });
     }
-    category.isActice = false;
+    category.isActive = false;
     await category.save();
     return res.status(200).json({
       message: "Category deleted successfully",
