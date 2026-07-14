@@ -3,6 +3,8 @@ import { CartContext } from "../../context/CartContext";
 import API from "../../services/api";
 import { AuthContext } from "../../context/AuthContext";
 import { useNavigate } from "react-router-dom";
+import AddressForm from "../../components/client/checkout/AddressForm";
+import PaymentMethod from "../../components/client/checkout/PaymentMethod";
 
 const CheckoutPage = () => {
   const navigate = useNavigate();
@@ -157,10 +159,6 @@ const CheckoutPage = () => {
     }
   };
 
-  useEffect(() => {
-    fetchUser();
-  }, []);
-
   const fetchUser = async () => {
     try {
       const { data } = await API.get("/users/get-user-by-id");
@@ -172,6 +170,10 @@ const CheckoutPage = () => {
       console.log(error);
     }
   };
+
+  useEffect(() => {
+    fetchUser();
+  }, []);
 
   const handleChange = (e) => {
     setAddress({
@@ -185,110 +187,18 @@ const CheckoutPage = () => {
       <h1 className="text-2xl font-semibold mb-4">Checkout</h1>
 
       <form onSubmit={handleSubmit} className="space-y-4">
-        <input
-          name="fullName"
-          className="w-full border p-2 rounded"
-          type="text"
-          placeholder="Full Name"
-          value={address.fullName}
-          onChange={handleChange}
+        <AddressForm address={address} handleChange={handleChange} />
+
+        <PaymentMethod
+          paymentMethod={paymentMethod}
+          setPaymentMethod={setPaymentMethod}
         />
-
-        <input
-          className="w-full border p-2 rounded"
-          name="phoneNumber"
-          type="text"
-          maxLength={10}
-          inputMode="numeric"
-          placeholder="Phone Number"
-          value={address.phoneNumber}
-          onChange={handleChange}
-        />
-
-        <input
-          className="w-full border p-2 rounded"
-          name="houseNo"
-          type="text"
-          placeholder="House No"
-          value={address.houseNo}
-          onChange={handleChange}
-        />
-
-        <input
-          className="w-full border p-2 rounded"
-          name="area"
-          type="text"
-          placeholder="Area"
-          value={address.area}
-          onChange={handleChange}
-        />
-
-        <input
-          className="w-full border p-2 rounded"
-          name="landmark"
-          type="text"
-          placeholder="Landmark"
-          value={address.landmark}
-          onChange={handleChange}
-        />
-
-        <input
-          className="w-full border p-2 rounded"
-          name="city"
-          type="text"
-          placeholder="City"
-          value={address.city}
-          onChange={handleChange}
-        />
-
-        <input
-          className="w-full border p-2 rounded"
-          name="state"
-          type="text"
-          placeholder="State"
-          value={address.state}
-          onChange={handleChange}
-        />
-
-        <input
-          className="w-full border p-2 rounded"
-          name="pincode"
-          type="text"
-          maxLength={6}
-          placeholder="Pincode"
-          value={address.pincode}
-          onChange={handleChange}
-        />
-
-        <div className="mt-6">
-          <h2 className="text-lg font-semibold mb-3">Payment Method</h2>
-
-          <label className="flex items-center gap-2 mb-2">
-            <input
-              type="radio"
-              value="COD"
-              checked={paymentMethod === "COD"}
-              onChange={(e) => setPaymentMethod(e.target.value)}
-            />
-            Cash on Delivery
-          </label>
-
-          <label className="flex items-center gap-2">
-            <input
-              type="radio"
-              value="Razorpay"
-              checked={paymentMethod === "Razorpay"}
-              onChange={(e) => setPaymentMethod(e.target.value)}
-            />
-            Razorpay
-          </label>
-        </div>
 
         <button
-          className="bg-black text-white px-4 py-2 rounded"
+          className="bg-black text-white px-4 py-2 rounded disabled:opacity-50"
           disabled={loading}
         >
-          Place Order
+          {loading ? "Processing..." : "Place Order"}
         </button>
       </form>
     </div>

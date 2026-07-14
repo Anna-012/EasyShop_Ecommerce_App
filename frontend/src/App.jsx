@@ -10,7 +10,7 @@ import OrdersPage from "./pages/client/OrdersPage";
 import { AuthContext } from "./context/AuthContext";
 import ProtectedRoute from "./components/auth/ProtectedRoute";
 import RegisterPage from "./pages/auth/RegisterPage";
-import Navbar from "./components/client/Navbar";
+import Navbar from "./components/client/Navbar/Navbar";
 import ForgotPassword from "./pages/auth/ForgotPassword";
 import ResetPassword from "./pages/auth/ResetPassword";
 import VerifyOtp from "./pages/auth/VerifyOtp";
