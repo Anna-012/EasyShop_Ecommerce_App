@@ -66,7 +66,7 @@ const Navbar = () => {
   return (
     <>
       <nav className="sticky top-0 z-50 bg-white shadow-sm">
-        <div className="max-w-7xl mx-auto flex items-center justify-between px-4 md:px-6 lg:px-8 py-3">
+        <div className="max-w-7xl mx-auto flex items-center justify-between px-6 lg:px-10 py-3">
           {/* Logo */}
           <Link to="/" className="flex items-center gap-3 shrink-0">
             <img
@@ -79,7 +79,9 @@ const Navbar = () => {
           </Link>
 
           {/* Desktop Categories */}
-          <DesktopCategories categories={categories} userInfo={userInfo} />
+          <div className="ml-8">
+            <DesktopCategories categories={categories} userInfo={userInfo} />
+          </div>
 
           {/* Desktop Search */}
           <SearchBar
@@ -94,7 +96,7 @@ const Navbar = () => {
           {/* Right Section */}
           <div
             ref={dropdownRef}
-            className="flex items-center gap-4 md:gap-6 relative"
+            className="flex items-center gap-6 md:gap-8 relative ml-6"
           >
             {/* Profile */}
             <div

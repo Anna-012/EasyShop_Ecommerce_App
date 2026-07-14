@@ -58,7 +58,17 @@ const SellerLoginPage = () => {
         <p className="text-center text-gray-500 mb-6">
           Access your seller dashboard
         </p>
+        <div className="mb-6 rounded-lg border border-blue-200 bg-blue-50 p-4">
+          <h3 className="font-semibold text-blue-800">Demo Credentials</h3>
 
+          <p className="text-sm mt-2">
+            <strong>Seller</strong>
+            <br />
+            Email: afreenshabbagh@gmail.com
+            <br />
+            Password: 123456
+          </p>
+        </div>
         <form onSubmit={handleLogin} className="space-y-4">
           <input
             type="email"

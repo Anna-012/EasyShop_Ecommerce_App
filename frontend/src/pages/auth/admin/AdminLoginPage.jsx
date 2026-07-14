@@ -56,6 +56,18 @@ const AdminLoginPage = () => {
           Access the admin dashboard
         </p>
 
+        <div className="mb-6 rounded-lg border border-blue-200 bg-blue-50 p-4">
+          <h3 className="font-semibold text-blue-800">Demo Credentials</h3>
+
+          <p className="text-sm mt-2">
+            <strong>Admin</strong>
+            <br />
+            Email: afreenrangrezz345@gmail.com
+            <br />
+            Password: 123456
+          </p>
+        </div>
+
         <form onSubmit={handleLogin} className="space-y-4">
           <input
             type="email"
