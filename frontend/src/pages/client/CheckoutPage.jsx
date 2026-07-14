@@ -3,8 +3,8 @@ import { CartContext } from "../../context/CartContext";
 import API from "../../services/api";
 import { AuthContext } from "../../context/AuthContext";
 import { useNavigate } from "react-router-dom";
-import AddressForm from "../../components/client/checkout/AddressForm";
-import PaymentMethod from "../../components/client/checkout/PaymentMethod";
+import AddressForm from "../../components/Checkout/AddressForm";
+import PaymentMethod from "../../components/Checkout/PaymentMethod";
 
 const CheckoutPage = () => {
   const navigate = useNavigate();
