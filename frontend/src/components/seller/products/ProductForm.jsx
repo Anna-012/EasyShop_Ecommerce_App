@@ -1,5 +1,3 @@
-
-
 const ProductForm = ({
   productData,
   categories,
@@ -146,7 +144,7 @@ const ProductForm = ({
               existingImages.map((image, index) => (
                 <img
                   key={index}
-                  src={image.url}
+                  src={image}
                   alt=""
                   className="w-20 h-20 rounded object-cover border"
                 />

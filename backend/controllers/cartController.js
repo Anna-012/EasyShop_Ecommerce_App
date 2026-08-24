@@ -67,6 +67,15 @@ export const getCart = async (req, res) => {
       return res.json({ items: [] });
     }
 
+    // Remove cart items whose product no longer exists
+    const validItems = cart.items.filter((item) => item.product !== null);
+
+    // If invalid items were found, update the cart in database
+    if (validItems.length !== cart.items.length) {
+      cart.items = validItems;
+      await cart.save();
+    }
+
     res.json(cart);
   } catch (error) {
     res.status(500).json({ message: error.message });

@@ -36,33 +36,28 @@ const AddProducts = () => {
   const fetchProduct = async () => {
     try {
       const { data } = await API.get(`/products/get-product/${id}`);
-      if (response.ok) {
-        setProductData({
-          title: data.product.title || "",
-          description: data.product.description || "",
-          category: data.product.category?._id || "",
-          brand: data.product.brand || "",
-          sellingPrice: data.product.sellingPrice || "",
-          mrpPrice: data.product.mrpPrice || "",
-          stockQuantity: data.product.stockQuantity || "",
-          images: [],
-        });
 
-        setExistingImages(data.product.images || []);
-      } else {
-        toast.error(data.message);
-      }
+      setProductData({
+        title: data.product.title || "",
+        description: data.product.description || "",
+        category: data.product.category?._id || "",
+        brand: data.product.brand || "",
+        sellingPrice: data.product.sellingPrice || "",
+        mrpPrice: data.product.mrpPrice || "",
+        stockQuantity: data.product.stockQuantity || "",
+        images: [],
+      });
+
+      setExistingImages(data.product.images || []);
     } catch (error) {
       console.log(error);
-      toast.error("Failed to load product");
+      toast.error(error.response?.data?.message || "Failed to load product");
     }
   };
 
   const fetchCategories = async () => {
     try {
       const { data } = await API.get("/category/get-all-categories");
-
-      console.log(data);
 
       setCategories(data.categories);
     } catch (error) {

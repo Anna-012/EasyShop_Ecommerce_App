@@ -119,6 +119,7 @@ const AppContent = () => {
             </ProtectedRoute>
           }
         />
+
         <Route
           path="/admin/categories"
           element={

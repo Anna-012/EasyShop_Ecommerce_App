@@ -6,6 +6,7 @@ const CartPage = () => {
   const { cartItems, increaseQty, decreaseQty, removeFromCart } =
     useContext(CartContext);
 
+  console.log("CART ITEMS:", cartItems);
   const total = cartItems.reduce(
     (acc, item) => acc + item.product.sellingPrice * item.qty,
     0,

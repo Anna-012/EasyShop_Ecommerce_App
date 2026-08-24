@@ -10,7 +10,10 @@ import {
   getUserById,
   toggleUserStatus,
 } from "../controllers/adminController.js";
-import { getProductsBySeller } from "../controllers/productController.js";
+import {
+  getProductsBySeller,
+  toggleProductStatus,
+} from "../controllers/productController.js";
 import { authMiddleware } from "../middleware/authMiddleware.js";
 
 const router = express.Router();
@@ -47,11 +50,12 @@ router.get(
 router.get("/user/:id", authMiddleware, adminMiddleware, getUserById);
 
 router.get("/get-all-users", authMiddleware, adminMiddleware, getAllUsers);
+
 router.put(
-  "/toggle-user-status/:id",
+  "/toggle-product-status/:id",
   authMiddleware,
   adminMiddleware,
-  toggleUserStatus,
+  toggleProductStatus,
 );
 
 export default router;

@@ -25,22 +25,24 @@ const AdminProductsPage = () => {
     }
   };
 
-  const handleDelete = async (id) => {
-    const confirmDelete = window.confirm(
-      "Are you sure you want to delete this product?",
+  const handleToggleStatus = async (id) => {
+    const confirmAction = window.confirm(
+      "Are you sure you want to change this product status?",
     );
 
-    if (!confirmDelete) return;
+    if (!confirmAction) return;
 
     try {
-      await API.delete(`/products/delete-product/${id}`);
+      const { data } = await API.put(`/admin/toggle-product-status/${id}`);
 
-      setProducts((prev) => prev.filter((item) => item._id !== id));
+      setProducts((prev) =>
+        prev.map((product) => (product._id === id ? data.product : product)),
+      );
 
-      alert("Product deleted successfully");
+      alert(data.message);
     } catch (error) {
       console.log(error);
-      alert(error.response?.data?.message || "Delete failed");
+      alert(error.response?.data?.message || "Failed to update status");
     }
   };
 
@@ -65,13 +67,6 @@ const AdminProductsPage = () => {
     <div className="bg-white rounded-xl shadow-md p-6">
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-3xl font-bold">Products Management</h1>
-
-        <button
-          onClick={() => navigate("/seller/add-product")}
-          className="bg-black hover:bg-gray-800 text-white px-5 py-2 rounded-lg"
-        >
-          + Add Product
-        </button>
       </div>
 
       <div className="mb-6">
@@ -117,7 +112,11 @@ const AdminProductsPage = () => {
               {filteredProducts.map((product) => (
                 <tr
                   key={product._id}
-                  className="text-center hover:bg-gray-50 transition"
+                  className={`text-center transition ${
+                    product.isActive
+                      ? "hover:bg-gray-50"
+                      : "bg-gray-200 text-gray-500"
+                  }`}
                 >
                   <td className="border p-2">
                     <img
@@ -151,19 +150,14 @@ const AdminProductsPage = () => {
 
                   <td className="border p-2 space-x-2">
                     <button
-                      onClick={() =>
-                        navigate(`/admin/products/edit/${product._id}`)
-                      }
-                      className="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded"
+                      onClick={() => handleToggleStatus(product._id)}
+                      className={`text-white px-3 py-1 rounded ${
+                        product.isActive
+                          ? "bg-red-500 hover:bg-red-600"
+                          : "bg-green-500 hover:bg-green-600"
+                      }`}
                     >
-                      Edit
-                    </button>
-
-                    <button
-                      onClick={() => handleDelete(product._id)}
-                      className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded"
-                    >
-                      Delete
+                      {product.isActive ? "Deactivate" : "Activate"}
                     </button>
                   </td>
                 </tr>
