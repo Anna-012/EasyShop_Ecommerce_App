@@ -1,154 +1,167 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useContext, useState, useRef, useEffect } from "react";
 import { HiOutlineShoppingCart } from "react-icons/hi";
+import { FiChevronDown, FiSearch } from "react-icons/fi";
 
 import { AuthContext } from "../../../context/AuthContext";
 import { CartContext } from "../../../context/CartContext";
-import logo from "../../../assets/Bird.jpg";
+import logo from "../../../assets/Bird.png";
 
-import API from "../../../services/api";
-
-import SellerAdminLinks from "./SellerAdminLinks";
 import ProfileDropdown from "./ProfileDropdown";
 import SearchBar from "./SearchBar";
-import DesktopCategories from "./DesktopCategories";
-import MobileCategories from "./MobileCategories";
 
 const Navbar = () => {
-  const { userInfo, logout } = useContext(AuthContext);
+  const { userInfo } = useContext(AuthContext);
   const { cartItems } = useContext(CartContext);
 
   const [search, setSearch] = useState("");
   const [showDropdown, setShowDropdown] = useState(false);
-  const [categories, setCategories] = useState([]);
 
-  const dropdownRef = useRef();
+  const dropdownRef = useRef(null);
   const navigate = useNavigate();
 
-  const totalItems = cartItems.reduce((acc, item) => acc + item.qty, 0);
+  const totalItems = cartItems.reduce(
+    (total, item) => total + (Number(item.qty) || 0),
+    0,
+  );
 
   useEffect(() => {
-    fetchCategories();
-
     const handleClickOutside = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
         setShowDropdown(false);
       }
     };
 
+    const handleEscape = (event) => {
+      if (event.key === "Escape") {
+        setShowDropdown(false);
+      }
+    };
+
     document.addEventListener("mousedown", handleClickOutside);
+    document.addEventListener("keydown", handleEscape);
 
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("keydown", handleEscape);
     };
   }, []);
 
-  const handleSearch = (e) => {
-    e.preventDefault();
+  const handleSearch = (event) => {
+    event.preventDefault();
 
-    if (search.trim()) {
-      navigate(`/?search=${search}`);
+    const query = search.trim();
+
+    if (query) {
+      navigate(`/?${new URLSearchParams({ search: query }).toString()}`);
     } else {
       navigate("/");
     }
   };
 
-  const fetchCategories = async () => {
-    try {
-      const { data } = await API.get("/category/get-all-categories");
-
-      setCategories(data.categories);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
   return (
-    <>
-      <nav className="sticky top-0 z-50 bg-white shadow-sm">
-        <div className="max-w-7xl mx-auto flex items-center justify-between px-6 lg:px-10 py-3">
-          {/* Logo */}
-          <Link to="/" className="flex items-center gap-3 shrink-0">
+    <header className="sticky top-0 z-50 border-b border-purple-100 bg-white shadow-sm">
+      <nav
+        aria-label="Main navigation"
+        className="w-full px-5 sm:px-8 lg:px-10"
+      >
+        <div className="relative flex min-h-[72px] items-center justify-between">
+          {/* BIRD Logo */}
+          <Link
+            to="/"
+            aria-label="BIRD home"
+            className="flex shrink-0 items-center justify-center rounded-xl transition hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-purple-500"
+          >
             <img
               src={logo}
-              alt="logo"
-              className="w-12 h-12 md:w-16 md:h-16 rounded-full object-cover"
+              alt="BIRD"
+              className="h-[62px] w-[62px] shrink-0 object-contain sm:h-[68px] sm:w-[68px]"
             />
-
-            <span className="font-bold text-xl text-orange-400">BIRD</span>
           </Link>
 
-          {/* Desktop Categories */}
-          <div className="ml-8">
-            <DesktopCategories categories={categories} userInfo={userInfo} />
+          {/* Desktop Search */}
+          <div className="absolute left-1/2 top-1/2 hidden w-[min(40vw,560px)] -translate-x-1/2 -translate-y-1/2 md:block">
+            <SearchBar
+              search={search}
+              setSearch={setSearch}
+              handleSearch={handleSearch}
+            />
           </div>
 
-          {/* Desktop Search */}
-          <SearchBar
-            search={search}
-            setSearch={setSearch}
-            handleSearch={handleSearch}
-          />
+          {/* Profile and Cart */}
+          <div className="ml-auto flex shrink-0 items-center gap-3 sm:gap-5">
+            <div ref={dropdownRef} className="relative">
+              <button
+                type="button"
+                aria-label="Toggle account menu"
+                aria-haspopup="true"
+                aria-expanded={showDropdown}
+                onClick={() => setShowDropdown((previous) => !previous)}
+                className="flex items-center gap-1.5 rounded-full p-1 transition hover:bg-purple-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-purple-500"
+              >
+                <span className="flex h-10 w-10 items-center justify-center rounded-full bg-purple-100 text-sm font-bold text-[#4C1D95] ring-1 ring-purple-200">
+                  {userInfo?.user?.name?.charAt(0)?.toUpperCase() || "U"}
+                </span>
 
-          {/* Seller & Admin Links */}
-          <SellerAdminLinks />
+                <FiChevronDown
+                  className={`hidden text-[#6D28D9] transition-transform sm:block ${
+                    showDropdown ? "rotate-180" : ""
+                  }`}
+                  size={17}
+                />
+              </button>
 
-          {/* Right Section */}
-          <div
-            ref={dropdownRef}
-            className="flex items-center gap-6 md:gap-8 relative ml-6"
-          >
-            {/* Profile */}
-            <div
-              className="flex items-center gap-1 cursor-pointer hover:text-grey-700 transition"
-              onClick={() => setShowDropdown(!showDropdown)}
-            >
-              <div className="w-9 h-9 rounded-full bg-black text-white flex items-center justify-center font-semibold">
-                {userInfo?.user?.name?.charAt(0).toUpperCase() || "U"}
-              </div>
-
-              <span className="hidden md:block text-sm">▼</span>
+              {/* Dropdown is only mounted while open */}
+              {showDropdown && (
+                <div className="absolute right-0 top-full z-[60] mt-2">
+                  <ProfileDropdown
+                    userInfo={userInfo}
+                    onClose={() => setShowDropdown(false)}
+                  />
+                </div>
+              )}
             </div>
-
-            {/* Dropdown */}
-            <ProfileDropdown
-              userInfo={userInfo}
-              showDropdown={showDropdown}
-              setShowDropdown={setShowDropdown}
-              logout={logout}
-            />
 
             {/* Cart */}
             <Link
               to="/cart"
-              className="ml-2 relative text-2xl hover:text-orange-500 transition"
+              aria-label={`Shopping cart, ${totalItems} items`}
+              className="relative flex h-10 w-10 items-center justify-center rounded-full text-2xl text-[#4C1D95] transition hover:bg-purple-50 hover:text-[#6D28D9] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-purple-500"
             >
               <HiOutlineShoppingCart />
 
               {totalItems > 0 && (
-                <span className="absolute -top-2 -right-2 min-w-[18px] h-[18px] px-1 rounded-full bg-red-500 text-white text-[10px] flex items-center justify-center">
-                  {totalItems}
+                <span className="absolute -right-0.5 -top-0.5 flex h-[19px] min-w-[19px] items-center justify-center rounded-full bg-[#6D28D9] px-1 text-[10px] font-bold text-white ring-2 ring-white">
+                  {totalItems > 99 ? "99+" : totalItems}
                 </span>
               )}
             </Link>
           </div>
         </div>
+
+        {/* Mobile Search */}
+        <div className="pb-3 md:hidden">
+          <form onSubmit={handleSearch} className="relative">
+            <input
+              type="search"
+              aria-label="Search products"
+              placeholder="Search products..."
+              value={search}
+              onChange={(event) => setSearch(event.target.value)}
+              className="w-full rounded-full border border-purple-100 bg-[#FAF9FF] py-2.5 pl-4 pr-11 text-sm text-gray-800 outline-none transition placeholder:text-gray-400 focus:border-[#6D28D9] focus:bg-white focus:ring-2 focus:ring-purple-100"
+            />
+
+            <button
+              type="submit"
+              aria-label="Submit search"
+              className="absolute right-2 top-1/2 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full text-[#6D28D9] transition hover:bg-purple-100"
+            >
+              <FiSearch size={18} />
+            </button>
+          </form>
+        </div>
       </nav>
-
-      <div className="md:hidden bg-white px-4 py-3 border-b">
-        <form onSubmit={handleSearch}>
-          <input
-            type="text"
-            placeholder="Search products..."
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            className="w-full border rounded-full px-4 py-2 focus:outline-none focus:ring-2 focus:ring-orange-400"
-          />
-        </form>
-      </div>
-
-      <MobileCategories categories={categories} />
-    </>
+    </header>
   );
 };
 

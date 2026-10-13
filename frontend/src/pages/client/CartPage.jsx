@@ -1,91 +1,102 @@
 import { useContext } from "react";
-import { CartContext } from "../../context/CartContext";
 import { Link } from "react-router-dom";
+import { FiShoppingBag } from "react-icons/fi";
+
+import { CartContext } from "../../context/CartContext";
+import { AuthContext } from "../../context/AuthContext";
+
+import CartSkeleton from "../../components/client/Cart/CartSkeleton";
+import CartItem from "../../components/client/Cart/CartItem";
+import CartSummary from "../../components/client/Cart/CartSummary";
+import EmptyCart from "../../components/client/Cart/EmptyCart";
 
 const CartPage = () => {
-  const { cartItems, increaseQty, decreaseQty, removeFromCart } =
-    useContext(CartContext);
+  const {
+    cartItems,
+    cartLoading,
+    cartError,
+    increaseQty,
+    decreaseQty,
+    removeFromCart,
+  } = useContext(CartContext);
 
-  console.log("CART ITEMS:", cartItems);
+  const { userInfo } = useContext(AuthContext);
+  const isLoggedIn = Boolean(userInfo);
+
+  // Loading state
+  if (isLoggedIn && cartLoading) {
+    return <CartSkeleton />;
+  }
+
+  // Error state
+  if (isLoggedIn && cartError) {
+    return (
+      <main className="min-h-screen bg-[#FAF9FF] px-4 py-8 sm:px-6 lg:px-8">
+        <div className="mx-auto max-w-6xl rounded-2xl border border-purple-100 bg-white px-5 py-16 text-center shadow-sm">
+          <div className="mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-full bg-purple-50">
+            <FiShoppingBag size={28} className="text-[#6D28D9]" />
+          </div>
+
+          <h2 className="text-xl font-bold text-[#4C1D95]">
+            Unable to load your cart
+          </h2>
+
+          <p className="mt-3 text-sm text-gray-500">
+            Please check your connection and try again.
+          </p>
+
+          <button
+            type="button"
+            onClick={() => window.location.reload()}
+            className="mt-6 rounded-xl bg-[#6D28D9] px-6 py-3 font-semibold text-white transition hover:bg-[#4C1D95]"
+          >
+            Try Again
+          </button>
+        </div>
+      </main>
+    );
+  }
+
+  // Total calculation
   const total = cartItems.reduce(
-    (acc, item) => acc + item.product.sellingPrice * item.qty,
+    (acc, item) => acc + Number(item.product.sellingPrice) * item.qty,
     0,
   );
 
   return (
-    <div className="min-h-screen bg-gray-50 p-6">
-      <h1 className="text-2xl font-semibold mb-6">Your Cart</h1>
+    <main className="min-h-screen bg-[#FAF9FF] px-4 py-8 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-6xl">
+        {cartItems.length === 0 ? (
+          <EmptyCart isLoggedIn={isLoggedIn} />
+        ) : (
+          <div className="grid grid-cols-1 items-start gap-6 lg:grid-cols-[1fr_340px]">
+            {/* Cart items */}
+            <section className="space-y-4">
+              <div className="flex items-center justify-between rounded-xl border border-purple-100 bg-white px-5 py-4">
+                <h2 className="font-semibold text-gray-900">Cart Items</h2>
 
-      {cartItems.length === 0 ? (
-        <p>Cart is empty</p>
-      ) : (
-        <div className="space-y-4 max-w-3xl">
-          {cartItems.map((item) => (
-            <div
-              key={item.product._id}
-              className="bg-white p-4 rounded-lg shadow flex items-center justify-between"
-            >
-              {/* LEFT SIDE */}
-              <div className="flex items-center gap-4">
-                <img
-                  src={item.product.images[0]}
-                  alt={item.product.title}
-                  className="w-20 h-20 object-contain"
+                <span className="rounded-full bg-purple-100 px-3 py-1 text-sm font-medium text-[#5B21B6]">
+                  {cartItems.reduce((count, item) => count + item.qty, 0)} items
+                </span>
+              </div>
+
+              {cartItems.map((item) => (
+                <CartItem
+                  key={item.product._id}
+                  item={item}
+                  increaseQty={increaseQty}
+                  decreaseQty={decreaseQty}
+                  removeFromCart={removeFromCart}
                 />
+              ))}
+            </section>
 
-                <div>
-                  <h3 className="font-medium">{item.product.title}</h3>
-                  <p className="text-gray-600">₹{item.product.sellingPrice}</p>
-                </div>
-              </div>
-
-              {/* RIGHT SIDE */}
-              <div className="flex items-center gap-6">
-                {/* QTY CONTROL */}
-                <div className="flex items-center border rounded-lg overflow-hidden">
-                  <button
-                    onClick={() => decreaseQty(item)}
-                    className="px-3 py-1 hover:bg-gray-100"
-                  >
-                    −
-                  </button>
-
-                  <span className="px-4">{item.qty}</span>
-
-                  <button
-                    onClick={() => increaseQty(item)}
-                    className="px-3 py-1 hover:bg-gray-100"
-                  >
-                    +
-                  </button>
-                </div>
-
-                {/* REMOVE BUTTON */}
-                <button
-                  onClick={() => removeFromCart(item)}
-                  className="text-red-500 hover:underline"
-                >
-                  Remove
-                </button>
-              </div>
-            </div>
-          ))}
-        </div>
-      )}
-
-      {/* TOTAL */}
-      <div className="mt-8 max-w-3xl">
-        <h2 className="text-xl font-semibold">Total: ₹{total}</h2>
+            {/* Order summary */}
+            <CartSummary total={total} />
+          </div>
+        )}
       </div>
-
-      {cartItems.length > 0 && (
-        <Link to="/checkout">
-          <button className="mt-4 bg-black text-white px-4 py-2 rounded">
-            Proceed to Checkout
-          </button>
-        </Link>
-      )}
-    </div>
+    </main>
   );
 };
 

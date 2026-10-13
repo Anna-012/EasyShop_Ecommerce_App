@@ -4,7 +4,7 @@ import User from "../models/User.js";
 export const getAllProducts = async (req, res) => {
   try {
     const products = await Product.find({
-      isActive: true,
+      isActive: true, 
     })
       .populate("category", "title")
       .populate("seller", "name email");

@@ -2,19 +2,27 @@ import { createContext, useState } from "react";
 
 export const AuthContext = createContext();
 
+const getStoredUserInfo = () => {
+  try {
+    const storedUser = sessionStorage.getItem("userInfo");
+    return storedUser ? JSON.parse(storedUser) : null;
+  } catch (error) {
+    console.error("Failed to read user info:", error);
+    return null;
+  }
+};
+
 export const AuthProvider = ({ children }) => {
-  const [userInfo, setUserInfo] = useState(
-    JSON.parse(localStorage.getItem("userInfo")) || null,
-  );
+  const [userInfo, setUserInfo] = useState(getStoredUserInfo);
 
   const login = (data) => {
     setUserInfo(data);
-    localStorage.setItem("userInfo", JSON.stringify(data));
+    sessionStorage.setItem("userInfo", JSON.stringify(data));
   };
 
   const logout = () => {
     setUserInfo(null);
-    localStorage.removeItem("userInfo");
+    sessionStorage.removeItem("userInfo");
   };
 
   return (
