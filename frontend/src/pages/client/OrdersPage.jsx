@@ -6,6 +6,7 @@ import {
   FiMapPin,
   FiCalendar,
   FiArrowRight,
+  FiArrowLeft,
   FiCreditCard,
 } from "react-icons/fi";
 
@@ -40,6 +41,7 @@ const OrdersPage = () => {
         setOrders(Array.isArray(data) ? data : []);
       } catch (err) {
         console.error("Failed to fetch orders:", err);
+
         setError(
           err.response?.data?.message ||
             "Unable to load your orders. Please try again.",
@@ -91,7 +93,7 @@ const OrdersPage = () => {
     <main className="min-h-screen bg-[#FAF9FF] px-4 py-7 sm:px-6 lg:py-10">
       <div className="mx-auto max-w-5xl">
         {/* Page heading */}
-        <div className="mb-7 flex items-center gap-4">
+        <div className="mb-5 flex items-center gap-4">
           <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-purple-100 text-[#6D28D9]">
             <FiShoppingBag size={24} />
           </div>
@@ -100,13 +102,26 @@ const OrdersPage = () => {
             <p className="text-xs font-semibold uppercase tracking-[0.18em] text-purple-600">
               Your BIRD Account
             </p>
+
             <h1 className="text-2xl font-bold text-[#4C1D95] sm:text-3xl">
               My Orders
             </h1>
+
             <p className="mt-1 text-sm text-gray-500">
               Track your purchases and view delivery details.
             </p>
           </div>
+        </div>
+
+        {/* Back to Shopping */}
+        <div className="mb-6">
+          <Link
+            to="/"
+            className="inline-flex items-center gap-2 rounded-xl border border-purple-200 bg-white px-4 py-2.5 text-sm font-semibold text-[#6D28D9] shadow-sm transition hover:border-purple-300 hover:bg-purple-50"
+          >
+            <FiArrowLeft size={17} />
+            Back to Shopping
+          </Link>
         </div>
 
         {/* Loading */}
@@ -119,6 +134,7 @@ const OrdersPage = () => {
               >
                 <div className="flex gap-4">
                   <div className="h-24 w-24 shrink-0 rounded-xl bg-purple-50" />
+
                   <div className="flex-1 space-y-3 py-1">
                     <div className="h-4 w-2/3 rounded bg-purple-50" />
                     <div className="h-3 w-1/2 rounded bg-gray-100" />
@@ -129,6 +145,7 @@ const OrdersPage = () => {
             ))}
           </div>
         ) : error ? (
+          /* Error state */
           <section className="rounded-2xl border border-purple-100 bg-white px-5 py-12 text-center shadow-sm">
             <FiPackage className="mx-auto text-purple-400" size={36} />
 
@@ -193,6 +210,7 @@ const OrdersPage = () => {
                       <p className="text-xs font-medium uppercase tracking-wider text-gray-500">
                         Order ID
                       </p>
+
                       <p className="mt-1 break-all text-sm font-semibold text-[#4C1D95]">
                         {order._id}
                       </p>
@@ -276,6 +294,7 @@ const OrdersPage = () => {
                             <p className="text-xs text-gray-500 sm:hidden">
                               Item price
                             </p>
+
                             <p className="text-xl font-bold text-[#4C1D95]">
                               {formatPrice(item.price)}
                             </p>

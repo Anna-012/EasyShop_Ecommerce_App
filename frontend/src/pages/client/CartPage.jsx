@@ -1,6 +1,6 @@
 import { useContext } from "react";
 import { Link } from "react-router-dom";
-import { FiShoppingBag } from "react-icons/fi";
+import { FiShoppingBag, FiArrowLeft } from "react-icons/fi";
 
 import { CartContext } from "../../context/CartContext";
 import { AuthContext } from "../../context/AuthContext";
@@ -48,7 +48,7 @@ const CartPage = () => {
           <button
             type="button"
             onClick={() => window.location.reload()}
-            className="mt-6 rounded-xl bg-[#6D28D9] px-6 py-3 font-semibold text-white transition hover:bg-[#4C1D95]"
+            className="mt-6 cursor-pointer rounded-xl bg-[#6D28D9] px-6 py-3 font-semibold text-white transition hover:bg-[#4C1D95]"
           >
             Try Again
           </button>
@@ -89,6 +89,17 @@ const CartPage = () => {
                   removeFromCart={removeFromCart}
                 />
               ))}
+
+              {/* Back to Shopping */}
+              <div className="pt-2">
+                <Link
+                  to="/"
+                  className="inline-flex cursor-pointer items-center gap-2 rounded-xl border border-purple-200 bg-white px-5 py-3 text-sm font-semibold text-[#6D28D9] shadow-sm transition hover:border-purple-400 hover:bg-purple-50"
+                >
+                  <FiArrowLeft size={17} />
+                  Back to Shopping
+                </Link>
+              </div>
             </section>
 
             {/* Order summary */}

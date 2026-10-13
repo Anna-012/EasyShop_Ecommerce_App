@@ -1,4 +1,4 @@
-import { StrictMode, useEffect } from "react";
+import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 
 import "./index.css";
@@ -11,10 +11,6 @@ import { SearchProvider } from "./context/SearchContext.jsx";
 import { Toaster } from "react-hot-toast";
 
 function Root() {
-  useEffect(() => {
-    window.hideBirdLoader?.();
-  }, []);
-
   return (
     <AuthProvider>
       <CartProvider>

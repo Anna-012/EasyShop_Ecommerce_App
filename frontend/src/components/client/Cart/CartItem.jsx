@@ -4,6 +4,9 @@ import { FiMinus, FiPlus, FiTrash2 } from "react-icons/fi";
 const CartItem = ({ item, increaseQty, decreaseQty, removeFromCart }) => {
   const product = item.product;
 
+  const stock = Number(product.stockQuantity ?? 0);
+  const isStockLimitReached = item.qty >= stock;
+
   return (
     <article className="flex flex-col gap-4 rounded-2xl border border-purple-100 bg-white p-4 shadow-sm transition hover:shadow-md sm:flex-row sm:items-center sm:justify-between sm:p-5">
       {/* Product details */}
@@ -39,38 +42,53 @@ const CartItem = ({ item, increaseQty, decreaseQty, removeFromCart }) => {
 
       {/* Quantity and remove */}
       <div className="flex items-center justify-between gap-4 sm:justify-end">
-        <div className="inline-flex items-center overflow-hidden rounded-lg border border-purple-200">
-          <button
-            type="button"
-            onClick={() => decreaseQty(item)}
-            aria-label={`Decrease quantity of ${product.title}`}
-            className="p-2.5 text-[#6D28D9] transition hover:bg-purple-50"
-          >
-            <FiMinus size={16} />
-          </button>
+        <div className="flex flex-col items-center gap-1.5">
+          {/* Quantity controls */}
+          <div className="inline-flex items-center overflow-hidden rounded-lg border border-purple-200">
+            <button
+              type="button"
+              onClick={() => decreaseQty(item)}
+              aria-label={`Decrease quantity of ${product.title}`}
+              className="cursor-pointer p-2.5 text-[#6D28D9] transition hover:bg-purple-50"
+            >
+              <FiMinus size={16} />
+            </button>
 
-          <span
-            className="min-w-10 text-center text-sm font-semibold text-gray-800"
-            aria-live="polite"
-          >
-            {item.qty}
-          </span>
+            <span
+              className="min-w-10 text-center text-sm font-semibold text-gray-800"
+              aria-live="polite"
+            >
+              {item.qty}
+            </span>
 
-          <button
-            type="button"
-            onClick={() => increaseQty(item)}
-            aria-label={`Increase quantity of ${product.title}`}
-            className="p-2.5 text-[#6D28D9] transition hover:bg-purple-50"
-          >
-            <FiPlus size={16} />
-          </button>
+            <button
+              type="button"
+              onClick={() => increaseQty(item)}
+              disabled={isStockLimitReached}
+              aria-label={`Increase quantity of ${product.title}`}
+              className="cursor-pointer p-2.5 text-[#6D28D9] transition hover:bg-purple-50 disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:bg-transparent"
+            >
+              <FiPlus size={16} />
+            </button>
+          </div>
+
+          {/* Stock limit message */}
+          {isStockLimitReached && (
+            <p
+              role="status"
+              className="text-center text-xs font-medium text-red-500"
+            >
+              Only {stock} {stock === 1 ? "item" : "items"} available
+            </p>
+          )}
         </div>
 
+        {/* Remove button */}
         <button
           type="button"
           onClick={() => removeFromCart(item)}
           aria-label={`Remove ${product.title} from cart`}
-          className="inline-flex items-center gap-1.5 rounded-lg px-2 py-2 text-sm font-medium text-red-500 transition hover:bg-red-50 hover:text-red-700"
+          className="inline-flex cursor-pointer items-center gap-1.5 rounded-lg px-2 py-2 text-sm font-medium text-red-500 transition hover:bg-red-50 hover:text-red-700"
         >
           <FiTrash2 size={16} />
           <span className="hidden sm:inline">Remove</span>

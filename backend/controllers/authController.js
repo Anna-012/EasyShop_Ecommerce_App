@@ -181,26 +181,33 @@ export const loginUser = async (req, res) => {
       });
     }
 
-    const user = await User.findOne({ email });
+    const user = await User.findOne({
+      email: email.trim().toLowerCase(),
+    });
 
-    if (!user) {
+    if (!user || !(await bcrypt.compare(password, user.password))) {
       return res.status(401).json({
         message: "Invalid email or password",
       });
     }
 
-    const isMatch = await bcrypt.compare(password, user.password);
+    // Blocked or deleted accounts cannot log in
+    if (user.isBlocked || user.isDeleted) {
+      return res.status(403).json({
+        message: "Your account is unavailable. Please contact support.",
+      });
+    }
 
-    if (!isMatch) {
-      return res.status(401).json({
+    // Customer login: only role "user" is allowed
+    if (user.role !== "user") {
+      return res.status(403).json({
         message: "Invalid email or password",
       });
     }
 
     if (!user.isVerified) {
-      return res.status(200).json({
-        message: "Login successful but email not verified",
-        token: null,
+      return res.status(403).json({
+        message: "Please verify your email before logging in.",
         isVerified: false,
       });
     }

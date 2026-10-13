@@ -141,6 +141,20 @@ const CheckoutPage = () => {
           email: userInfo.user?.email || "",
         },
 
+        config: {
+          display: {
+            hide: [
+              {
+                method: "wallet",
+                wallets: ["mobikwik"],
+              },
+            ],
+            preferences: {
+              show_default_blocks: true,
+            },
+          },
+        },
+
         theme: {
           color: "#6D28D9",
         },
