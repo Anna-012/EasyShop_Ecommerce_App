@@ -9,7 +9,6 @@ const CartItem = ({ item, increaseQty, decreaseQty, removeFromCart }) => {
 
   return (
     <article className="flex flex-col gap-4 rounded-2xl border border-purple-100 bg-white p-4 shadow-sm transition hover:shadow-md sm:flex-row sm:items-center sm:justify-between sm:p-5">
-      {/* Product details */}
       <div className="flex min-w-0 items-center gap-4">
         <Link
           to={`/product/${product._id}`}
@@ -40,10 +39,8 @@ const CartItem = ({ item, increaseQty, decreaseQty, removeFromCart }) => {
         </div>
       </div>
 
-      {/* Quantity and remove */}
       <div className="flex items-center justify-between gap-4 sm:justify-end">
         <div className="flex flex-col items-center gap-1.5">
-          {/* Quantity controls */}
           <div className="inline-flex items-center overflow-hidden rounded-lg border border-purple-200">
             <button
               type="button"
@@ -72,7 +69,6 @@ const CartItem = ({ item, increaseQty, decreaseQty, removeFromCart }) => {
             </button>
           </div>
 
-          {/* Stock limit message */}
           {isStockLimitReached && (
             <p
               role="status"
@@ -83,7 +79,6 @@ const CartItem = ({ item, increaseQty, decreaseQty, removeFromCart }) => {
           )}
         </div>
 
-        {/* Remove button */}
         <button
           type="button"
           onClick={() => removeFromCart(item)}

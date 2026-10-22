@@ -20,7 +20,6 @@ const SellerNavbar = () => {
 
   const sellerName = userInfo?.user?.name || "Seller";
 
-  // Close dropdown when clicking outside or pressing Escape
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (profileRef.current && !profileRef.current.contains(event.target)) {
@@ -60,7 +59,6 @@ const SellerNavbar = () => {
         aria-label="Seller navigation"
         className="flex min-h-[88px] items-center justify-between gap-4 px-5 sm:px-8 lg:px-10"
       >
-        {/* BIRD Branding */}
         <button
           type="button"
           onClick={() => navigateTo("/seller/dashboard")}
@@ -74,9 +72,7 @@ const SellerNavbar = () => {
           />
         </button>
 
-        {/* Profile and Logout */}
         <div className="flex items-center gap-3 sm:gap-5 lg:gap-6">
-          {/* Profile dropdown */}
           <div ref={profileRef} className="relative">
             <button
               type="button"
@@ -167,10 +163,8 @@ const SellerNavbar = () => {
             )}
           </div>
 
-          {/* Divider */}
           <span className="hidden h-9 w-px bg-gray-200 sm:block" />
 
-          {/* Main logout button */}
           <button
             type="button"
             onClick={logoutHandler}

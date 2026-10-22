@@ -49,7 +49,6 @@ const ProfileDropdown = ({ userInfo: passedUserInfo, onClose }) => {
     <div className="w-60 overflow-hidden rounded-xl border border-purple-100 bg-white shadow-xl shadow-purple-900/10">
       {user ? (
         <>
-          {/* Compact Profile Header */}
           <div className="flex items-center gap-2.5 border-b border-purple-100 bg-purple-50/60 px-3 py-2.5">
             <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-purple-100 text-purple-700">
               <FiUser size={16} />
@@ -63,7 +62,6 @@ const ProfileDropdown = ({ userInfo: passedUserInfo, onClose }) => {
             </div>
           </div>
 
-          {/* Role-based Menu */}
           <div className="space-y-0.5 p-1.5">
             {isAdmin ? (
               <>
@@ -90,7 +88,6 @@ const ProfileDropdown = ({ userInfo: passedUserInfo, onClose }) => {
             )}
           </div>
 
-          {/* Logout */}
           <div className="border-t border-purple-100 p-1.5">
             <button
               type="button"
@@ -104,7 +101,6 @@ const ProfileDropdown = ({ userInfo: passedUserInfo, onClose }) => {
         </>
       ) : (
         <>
-          {/* Guest Header */}
           <div className="border-b border-purple-100 bg-purple-50/60 px-3 py-2.5">
             <p className="text-sm font-semibold text-purple-900">
               Welcome to BIRD
@@ -114,7 +110,6 @@ const ProfileDropdown = ({ userInfo: passedUserInfo, onClose }) => {
             </p>
           </div>
 
-          {/* Customer */}
           <div className="space-y-0.5 p-1.5">
             <SectionLabel>Customer</SectionLabel>
             <Item to="/login" icon={FiLogIn}>
@@ -125,7 +120,6 @@ const ProfileDropdown = ({ userInfo: passedUserInfo, onClose }) => {
             </Item>
           </div>
 
-          {/* Seller */}
           <div className="border-t border-purple-100 p-1.5">
             <SectionLabel>Seller</SectionLabel>
             <Item to="/seller/login" icon={FiBriefcase}>

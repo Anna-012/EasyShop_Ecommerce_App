@@ -1,5 +1,4 @@
 import jwt from "jsonwebtoken";
-import User from "../models/User.js";
 
 export const authMiddleware = (req, res, next) => {
   const authHeader = req.headers.authorization;

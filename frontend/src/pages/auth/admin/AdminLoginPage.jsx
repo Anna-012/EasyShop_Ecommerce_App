@@ -32,6 +32,7 @@ const AdminLoginPage = () => {
       const { data } = await API.post("/auth/login", {
         email,
         password,
+        expectedRole: "admin",
       });
 
       if (!data.isVerified) {

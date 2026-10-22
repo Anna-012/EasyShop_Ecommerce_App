@@ -4,7 +4,7 @@ import User from "../models/User.js";
 export const getAllProducts = async (req, res) => {
   try {
     const products = await Product.find({
-      isActive: true, 
+      isActive: true,
     })
       .populate("category", "title")
       .populate("seller", "name email");
@@ -212,7 +212,6 @@ export const getProductsBySeller = async (req, res) => {
   try {
     const { sellerId } = req.params;
 
-    // Seller details
     const seller = await User.findById(sellerId).select(
       "name email phoneNumber sellerStatus address createdAt",
     );
@@ -223,7 +222,6 @@ export const getProductsBySeller = async (req, res) => {
       });
     }
 
-    // Seller products
     const products = await Product.find({
       seller: sellerId,
       isActive: true,

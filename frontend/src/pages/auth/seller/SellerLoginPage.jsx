@@ -31,6 +31,7 @@ const SellerLoginPage = () => {
       const { data } = await API.post("/auth/login", {
         email,
         password,
+        expectedRole: "seller",
       });
 
       if (!data.isVerified) {

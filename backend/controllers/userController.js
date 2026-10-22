@@ -22,7 +22,6 @@ export const getUserById = async (req, res) => {
   }
 };
 
-//Example of query params - GET/get-user-by-email?email=afreenshabbagh@gmail.com
 export const getUserByEmail = async (req, res) => {
   try {
     if (req.user.role !== "admin") {

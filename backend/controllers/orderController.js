@@ -2,7 +2,6 @@ import Order from "../models/orderModel.js";
 import Cart from "../models/cartModel.js";
 import Product from "../models/Products.js";
 
-// CREATE ORDER
 export const createOrder = async (req, res) => {
   try {
     const { orderItems, shippingAddress, paymentMethod } = req.body;
@@ -94,7 +93,6 @@ export const createOrder = async (req, res) => {
   }
 };
 
-// GET MY ORDERS
 export const getMyOrders = async (req, res) => {
   try {
     const orders = await Order.find({
@@ -109,7 +107,6 @@ export const getMyOrders = async (req, res) => {
   }
 };
 
-// UPDATE ORDER TO PAID
 export const updateOrderToPaid = async (req, res) => {
   try {
     const order = await Order.findById(req.params.id);
@@ -129,7 +126,6 @@ export const updateOrderToPaid = async (req, res) => {
   }
 };
 
-// UPDATE ORDER TO DELIVERED
 export const updateOrderToDelivered = async (req, res) => {
   try {
     const order = await Order.findById(req.params.id);
@@ -149,7 +145,6 @@ export const updateOrderToDelivered = async (req, res) => {
   }
 };
 
-// GET SINGLE ORDER
 export const getOrderById = async (req, res) => {
   try {
     const order = await Order.findById(req.params.id)
@@ -210,7 +205,7 @@ export const updateOrderStatus = async (req, res) => {
 export const getSellerOrders = async (req, res) => {
   try {
     console.log("Seller:", req.user._id);
-    // Seller ke products
+
     const products = await Product.find({
       seller: req.user._id,
     });

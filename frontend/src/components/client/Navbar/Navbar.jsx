@@ -66,7 +66,6 @@ const Navbar = () => {
         className="w-full px-5 sm:px-8 lg:px-10"
       >
         <div className="relative flex min-h-[72px] items-center justify-between">
-          {/* BIRD Logo */}
           <Link
             to="/"
             aria-label="BIRD home"
@@ -79,7 +78,6 @@ const Navbar = () => {
             />
           </Link>
 
-          {/* Desktop Search */}
           <div className="absolute left-1/2 top-1/2 hidden w-[min(40vw,560px)] -translate-x-1/2 -translate-y-1/2 md:block">
             <SearchBar
               search={search}
@@ -88,7 +86,6 @@ const Navbar = () => {
             />
           </div>
 
-          {/* Profile and Cart */}
           <div className="ml-auto flex shrink-0 items-center gap-3 sm:gap-5">
             <div ref={dropdownRef} className="relative">
               <button
@@ -111,7 +108,6 @@ const Navbar = () => {
                 />
               </button>
 
-              {/* Dropdown is only mounted while open */}
               {showDropdown && (
                 <div className="absolute right-0 top-full z-[60] mt-2">
                   <ProfileDropdown
@@ -122,7 +118,6 @@ const Navbar = () => {
               )}
             </div>
 
-            {/* Cart */}
             <Link
               to="/cart"
               aria-label={`Shopping cart, ${totalItems} items`}
@@ -139,7 +134,6 @@ const Navbar = () => {
           </div>
         </div>
 
-        {/* Mobile Search */}
         <div className="pb-3 md:hidden">
           <form onSubmit={handleSearch} className="relative">
             <input

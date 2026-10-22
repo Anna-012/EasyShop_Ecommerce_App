@@ -11,8 +11,6 @@ import {
   FiLoader,
 } from "react-icons/fi";
 
-// IMPORTANT: Keep Field outside ProductForm.
-// This prevents inputs from remounting on every keystroke.
 const inputClass =
   "w-full rounded-lg border border-gray-200 bg-[#FAF9FF] px-3 py-2 text-sm text-gray-800 outline-none transition placeholder:text-gray-400 hover:border-purple-200 focus:border-[#6D28D9] focus:bg-white focus:ring-2 focus:ring-purple-100";
 
@@ -62,7 +60,6 @@ const ProductForm = ({
   return (
     <form onSubmit={handleSubmit} className="w-full">
       <div className="grid grid-cols-1 gap-x-5 gap-y-4 sm:grid-cols-2 lg:grid-cols-3">
-        {/* Product Name */}
         <Field label="Product Name" icon={FiPackage}>
           <input
             type="text"
@@ -88,7 +85,6 @@ const ProductForm = ({
           />
         </Field>
 
-        {/* Category */}
         <Field label="Category" icon={FiLayers}>
           <select
             name="category"
@@ -107,7 +103,6 @@ const ProductForm = ({
           </select>
         </Field>
 
-        {/* Selling Price */}
         <Field label="Selling Price (₹)" icon={FiDollarSign}>
           <input
             type="number"
@@ -122,7 +117,6 @@ const ProductForm = ({
           />
         </Field>
 
-        {/* MRP */}
         <Field label="MRP Price (₹)" icon={FiDollarSign}>
           <input
             type="number"
@@ -137,7 +131,6 @@ const ProductForm = ({
           />
         </Field>
 
-        {/* Stock */}
         <Field label="Stock Quantity" icon={FiBox}>
           <input
             type="number"
@@ -152,7 +145,6 @@ const ProductForm = ({
           />
         </Field>
 
-        {/* Description */}
         <div className="sm:col-span-2 lg:col-span-3">
           <Field label="Product Description" icon={FiFileText}>
             <textarea
@@ -167,7 +159,6 @@ const ProductForm = ({
           </Field>
         </div>
 
-        {/* Image Upload */}
         <div className="min-w-0 sm:col-span-2 lg:col-span-3">
           <Field label="Product Images" icon={FiImage}>
             <div className="flex flex-col gap-3 rounded-xl border border-dashed border-purple-200 bg-[#FAF9FF] p-3 sm:flex-row sm:items-center">
@@ -224,7 +215,6 @@ const ProductForm = ({
           </Field>
         </div>
 
-        {/* Submit Button */}
         <div className="flex justify-end border-t border-gray-100 pt-4 sm:col-span-2 lg:col-span-3">
           <button
             type="submit"

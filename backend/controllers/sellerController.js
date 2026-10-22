@@ -63,7 +63,6 @@ export const updateSellerProfile = async (req, res) => {
 
 export const getSellerDashboard = async (req, res) => {
   try {
-    // Seller ke products
     const products = await Product.find({
       seller: req.user._id,
       isActive: true,
@@ -71,23 +70,19 @@ export const getSellerDashboard = async (req, res) => {
 
     const productIds = products.map((product) => product._id);
 
-    // Seller ke orders
     const orders = await Order.find({
       "orderItems.product": {
         $in: productIds,
       },
     }).sort({ createdAt: -1 });
 
-    // Revenue
     const revenue = orders.reduce(
       (total, order) => total + order.totalPrice,
       0,
     );
 
-    // Latest 5 products
     const latestProducts = products.slice(0, 5);
 
-    // Latest 5 orders
     const recentOrders = orders.slice(0, 5);
 
     return res.status(200).json({

@@ -3,7 +3,6 @@ const CartSkeleton = () => {
     <main className="min-h-screen bg-[#FAF9FF] px-4 py-8 sm:px-6 lg:px-8">
       <div className="mx-auto max-w-6xl">
         <div className="grid grid-cols-1 items-start gap-6 lg:grid-cols-[1fr_340px]">
-          {/* Cart items skeleton */}
           <section className="space-y-4">
             <div className="flex items-center justify-between rounded-xl border border-purple-100 bg-white px-5 py-4">
               <div className="shimmer-bg h-5 w-28 rounded-md" />
@@ -33,7 +32,6 @@ const CartSkeleton = () => {
             ))}
           </section>
 
-          {/* Order summary skeleton */}
           <aside className="rounded-2xl border border-purple-100 bg-white p-5 shadow-sm">
             <div className="shimmer-bg h-6 w-36 rounded-md" />
 

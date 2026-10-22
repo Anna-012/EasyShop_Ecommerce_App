@@ -2,8 +2,6 @@ import razorpay from "../utils/razorpay.js";
 
 export const createRazorpayOrder = async (req, res) => {
   try {
-    console.log("KEY:", process.env.RAZORPAY_KEY_ID);
-    console.log("SECRET:", process.env.RAZORPAY_KEY_SECRET);
     const { amount } = req.body;
 
     const options = {

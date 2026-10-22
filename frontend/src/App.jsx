@@ -8,8 +8,6 @@ const HideBirdLoaderOnRoute = () => {
   const { pathname } = useLocation();
 
   useEffect(() => {
-    // HomePage handles its own initial loading.
-    // Other routes should not leave the full-screen loader visible.
     if (pathname !== "/") {
       window.hideBirdLoader?.();
     }

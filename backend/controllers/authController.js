@@ -173,11 +173,19 @@ export const forgotPassword = async (req, res) => {
 
 export const loginUser = async (req, res) => {
   try {
-    const { email, password } = req.body;
+    const { email, password, expectedRole = "user" } = req.body;
 
     if (!email || !password) {
       return res.status(400).json({
         message: "Email and password are required",
+      });
+    }
+
+    const allowedRoles = ["user", "seller", "admin"];
+
+    if (!allowedRoles.includes(expectedRole)) {
+      return res.status(403).json({
+        message: "Invalid email or password",
       });
     }
 
@@ -191,20 +199,20 @@ export const loginUser = async (req, res) => {
       });
     }
 
-    // Blocked or deleted accounts cannot log in
+    if (user.role !== expectedRole) {
+      return res.status(403).json({
+        message: "Invalid email or password",
+      });
+    }
+
+    // 6. Block unavailable accounts
     if (user.isBlocked || user.isDeleted) {
       return res.status(403).json({
         message: "Your account is unavailable. Please contact support.",
       });
     }
 
-    // Customer login: only role "user" is allowed
-    if (user.role !== "user") {
-      return res.status(403).json({
-        message: "Invalid email or password",
-      });
-    }
-
+    // 7. Verify email status
     if (!user.isVerified) {
       return res.status(403).json({
         message: "Please verify your email before logging in.",
@@ -212,8 +220,10 @@ export const loginUser = async (req, res) => {
       });
     }
 
+    // 8. Generate authentication token
     const token = generateToken(user);
 
+    // 9. Return authenticated user information
     return res.status(200).json({
       message: "Login successful",
       token,
@@ -226,7 +236,7 @@ export const loginUser = async (req, res) => {
       },
     });
   } catch (error) {
-    console.error(error);
+    console.error("Login error:", error.message);
 
     return res.status(500).json({
       message: "Internal server error",

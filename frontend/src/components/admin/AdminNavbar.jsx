@@ -32,7 +32,6 @@ const AdminNavbar = () => {
   return (
     <nav className="sticky top-0 z-40 border-b border-[#EAE5EF] bg-white/95 shadow-[0_2px_12px_rgba(53,32,71,0.03)] backdrop-blur-md">
       <div className="flex min-h-[76px] items-center justify-between gap-3 px-4 sm:px-6 lg:px-8">
-        {/* Logo and Brand */}
         <button
           type="button"
           onClick={() => navigate("/admin/dashboard")}
@@ -46,9 +45,7 @@ const AdminNavbar = () => {
           />
         </button>
 
-        {/* Right Section */}
         <div className="flex items-center gap-2 sm:gap-4">
-          {/* Admin Status */}
           <div className="hidden items-center gap-2 rounded-xl border border-[#EAE5EF] bg-[#FAF9FF] px-3 py-2 sm:flex">
             <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#F1EBF8] text-[#5B3488]">
               <FiShield size={17} />
@@ -64,7 +61,6 @@ const AdminNavbar = () => {
             </span>
           </div>
 
-          {/* Profile Dropdown */}
           <div className="relative">
             <button
               type="button"
@@ -96,7 +92,6 @@ const AdminNavbar = () => {
 
             {profileOpen && (
               <>
-                {/* Close dropdown when clicking outside */}
                 <button
                   type="button"
                   aria-label="Close administrator menu"

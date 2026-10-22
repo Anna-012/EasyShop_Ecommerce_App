@@ -46,7 +46,6 @@ const AdminSidebar = () => {
 
   return (
     <aside className="flex min-h-[calc(100vh-124px)] w-64 shrink-0 flex-col self-start overflow-hidden rounded-2xl border border-[#E5D9F4] bg-white shadow-[0_8px_28px_rgba(76,29,149,0.07)]">
-      {/* Navigation */}
       <nav className="flex-1 space-y-1.5 px-3 py-5">
         <p className="mb-3 px-3 text-[10px] font-bold uppercase tracking-[0.16em] text-[#8B6AAF]">
           ADMIN WORKSPACE
@@ -97,7 +96,6 @@ const AdminSidebar = () => {
         })}
       </nav>
 
-      {/* Bottom Information Card */}
       <div className="border-t border-[#EDE5F7] p-4">
         <div className="rounded-xl border border-[#E5D6F8] bg-[#F5EEFF] p-3.5">
           <div className="flex items-center gap-2">
